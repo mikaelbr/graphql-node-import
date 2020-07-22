@@ -1,0 +1,186 @@
+query ById(
+  $ids: [String]!
+  $timeRange: Int!
+  $limit: Int!
+  $omitNonBoarding: Boolean!
+  $includeCancelledTrips: Boolean!
+) {
+  stopPlaces(ids: $ids) {
+    ...stopPlaceFields
+    quays(filterByInUse: true) {
+      ...quayFields
+      estimatedCalls(
+        timeRange: $timeRange
+        numberOfDepartures: $limit
+        omitNonBoarding: $omitNonBoarding
+        includeCancelledTrips: $includeCancelledTrips
+      ) {
+        ...estimatedCallFields
+      }
+    }
+  }
+}
+
+query ByBBox(
+  $minLat: Float
+  $minLng: Float
+  $maxLng: Float
+  $maxLat: Float
+  $timeRange: Int!
+  $limit: Int!
+  $omitNonBoarding: Boolean!
+  $includeCancelledTrips: Boolean!
+) {
+  stopPlacesByBbox(
+    minimumLatitude: $minLat
+    minimumLongitude: $minLng
+    maximumLatitude: $maxLat
+    maximumLongitude: $maxLng
+  ) {
+    ...stopPlaceFields
+    quays(filterByInUse: true) {
+      ...quayFields
+      estimatedCalls(
+        timeRange: $timeRange
+        numberOfDepartures: $limit
+        omitNonBoarding: $omitNonBoarding
+        includeCancelledTrips: $includeCancelledTrips
+      ) {
+        ...estimatedCallFields
+      }
+    }
+  }
+}
+
+fragment estimatedCallFields on EstimatedCall {
+  actualArrivalTime
+  actualDepartureTime
+  aimedArrivalTime
+  aimedDepartureTime
+  cancellation
+  date
+  destinationDisplay {
+    frontText
+  }
+  expectedDepartureTime
+  expectedArrivalTime
+  forAlighting
+  forBoarding
+  notices {
+    ...noticeFields
+  }
+  predictionInaccurate
+  quay {
+    ...quayFields
+  }
+  realtime
+  requestStop
+  serviceJourney {
+    ...serviceJourneyFields
+  }
+  situations {
+    ...situationFields
+  }
+}
+fragment noticeFields on Notice {
+  text
+}
+fragment quayFields on Quay {
+  id
+  name
+  description
+  publicCode
+  situations {
+    ...situationFields
+  }
+  stopPlace {
+    ...stopPlaceFields
+  }
+}
+fragment situationFields on PtSituationElement {
+  situationNumber
+  summary {
+    language
+    value
+  }
+  description {
+    language
+    value
+  }
+  advice {
+    language
+    value
+  }
+  detail {
+    language
+    value
+  }
+  lines {
+    ...lineFields
+  }
+  validityPeriod {
+    startTime
+    endTime
+  }
+  reportType
+  infoLinks {
+    uri
+    label
+  }
+}
+fragment lineFields on Line {
+  bookingArrangements {
+    ...bookingArrangementFields
+  }
+  description
+  flexibleLineType
+  id
+  name
+  notices {
+    ...noticeFields
+  }
+  publicCode
+  transportMode
+  transportSubmode
+}
+fragment bookingArrangementFields on BookingArrangement {
+  bookingMethods
+  bookingNote
+  minimumBookingPeriod
+  bookingContact {
+    phone
+    url
+  }
+}
+fragment stopPlaceFields on StopPlace {
+  id
+  description
+  name
+  latitude
+  longitude
+  wheelchairBoarding
+  weighting
+  transportMode
+  transportSubmode
+  tariffZones {
+    id
+  }
+}
+fragment serviceJourneyFields on ServiceJourney {
+  id
+  directionType
+  journeyPattern {
+    line {
+      ...lineFields
+    }
+    notices {
+      ...noticeFields
+    }
+  }
+  notices {
+    ...noticeFields
+  }
+  publicCode
+  privateCode
+  transportSubmode
+}

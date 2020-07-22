@@ -1,0 +1,5 @@
+query($quayIds: [String]!) {
+  quays(ids: $quayIds) {
+    id
+  }
+}
