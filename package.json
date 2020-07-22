@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "ava",
-    "build": "tsc && copyfiles package.json types/* dist"
+    "build": "tsc && copyfiles README.md package.json types/* dist"
   },
   "dependencies": {
     "graphql": "^15.3.0",
