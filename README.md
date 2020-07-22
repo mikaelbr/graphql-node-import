@@ -80,7 +80,7 @@ fragment fragName on SomeType {
 ```
 
 ```ts
-import { fragments } from "./query.gql";
+import { fragments } from "./fragments.gql";
 import gql from "graphql-tag";
 
 const query = qgl`
